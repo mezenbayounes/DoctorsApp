@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "250143680361",
+    "project_id": "doctorapp1998",
+    "storage_bucket": "doctorapp1998.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250143680361:android:3af9f047213b7d1ba97ff8",
+        "android_client_info": {
+          "package_name": "com.example.doctor_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaCHdXnzpPXShdVE-lRwgvsP2RehucU9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
