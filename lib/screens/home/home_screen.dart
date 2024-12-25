@@ -1,73 +1,61 @@
-import 'package:doctor_app/screens/login/login_screen.dart';
-import 'package:doctor_app/services/auth_service.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'home_provider.dart';
+import 'package:doctor_app/screens/profile/profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:doctor_app/widgets/bottom_nav_bar.dart';
+import 'package:flutter/material.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final homeProvider = context.watch<HomeProvider>();
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = [
+    const HomePage(), // Home screen
+    const SearchPage(), // Search screen
+    const ProfileScreen(), // Profile screen
+  ];
+
+  void _onTabSelected(int index) {
+    if (index == _currentIndex) return; // Prevent redundant navigation
+
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: const Text('Home')),
-        actions: [
-          // Add a logout button to the AppBar
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () async {
-              await _logout(context); // Call the logout method
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              homeProvider.welcomeMessage,
-              style: const TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 20),
-            // You can also add a button for logout here
-            ElevatedButton(
-              onPressed: () async {
-                await _logout(context);
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
+      body: _pages[_currentIndex], // Display the selected page
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _currentIndex,
+        onTabSelected: _onTabSelected,
+        context: context, // Pass context for navigation
       ),
     );
   }
+}
 
-  // Method to handle logout using AuthService
-  Future<void> _logout(BuildContext context) async {
-    try {
-      // Call signOut method from AuthService
-      await AuthService().signOut();
+// Home Page (content)
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
-      // After logout, clear any cached authentication state (optional)
-      await AuthService().clearAuthCache();
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Home Page'));
+  }
+}
 
-      // Navigate to the login screen after logout
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const LoginScreen()), // Replace with your login screen
-      );
-    } catch (e) {
-      // Handle any errors that occur during logout
-      print('Error logging out: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error logging out. Please try again.')),
-      );
-    }
+// Search Page (content)
+class SearchPage extends StatelessWidget {
+  const SearchPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Search Page'));
   }
 }
