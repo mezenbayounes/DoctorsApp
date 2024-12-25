@@ -400,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  simple_drawer:
+    dependency: "direct main"
+    description:
+      name: simple_drawer
+      sha256: "84226187c22335f150a85424b1eeb7e52bd7aea8c4e7fe7f6fa60aa688bbbb80"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.11"
   sky_engine:
     dependency: transitive
     description: flutter

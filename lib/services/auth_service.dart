@@ -1,3 +1,4 @@
+import 'package:doctor_app/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class AuthService {
         email: email,
         password: password,
       );
+     
       return userCredential.user; // Return the user on successful signup
     } on FirebaseAuthException catch (e) {
       _handleAuthError(context, e); // Handle specific Firebase errors
@@ -48,9 +50,7 @@ class AuthService {
         await prefs.setString('user_email', userCredential.user?.email ?? '');
         String? userEmail = prefs.getString('user_email');
 
-
         print('Stored Email: $userEmail');
-        
       }
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -97,20 +97,20 @@ class AuthService {
   }
 
   // Sign out (logout)
-  Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-      print('User logged out');
-    } catch (e) {
-      print('Error during logout: $e');
-      throw Exception('Logout failed');
-    }
+  Future<void> signOut(
+    BuildContext context,
+  ) async {
+    await _auth.signOut();
+    Navigator.pushReplacementNamed(context, AppRoutes.login);
+
+    print('User logged out');
   }
 
   // Clear auth cache (optional, in case you want to clear any cached auth data)
   Future<void> clearAuthCache() async {
     try {
       await _auth.signOut();
+
       print('Auth cache cleared');
     } catch (e) {
       print('Error clearing auth cache: $e');

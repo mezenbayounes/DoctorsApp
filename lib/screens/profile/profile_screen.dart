@@ -99,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : Column(
                       children: [
                         // Custom ImageView before the profile container
-                        SizedBox(height: 60),
+
                         Image.asset(
                           'assets/profile.png', // Path to your image in the assets folder
                           width: 300.0, // Specify width
