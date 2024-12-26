@@ -1,9 +1,11 @@
 import 'package:doctor_app/firebase_options.dart';
 import 'package:doctor_app/routes/app_routes.dart';
+import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_provider.dart';
 import 'package:doctor_app/screens/home/home_provider.dart';
 import 'package:doctor_app/screens/login/login_provider.dart';
 import 'package:doctor_app/screens/profile/profile_provider.dart';
 import 'package:doctor_app/screens/signup/signup_provider.dart';
+import 'package:doctor_app/screens/validation/validation_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +26,9 @@ class DoctorsApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => SignupProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-                ChangeNotifierProvider(create: (_) => ProfileProvider()),
-
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => ValidationProvider()),
+        ChangeNotifierProvider(create: (_) => ShiftAssignmentProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

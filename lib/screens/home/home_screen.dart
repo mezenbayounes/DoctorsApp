@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_screen.dart';
+import 'package:doctor_app/screens/validation/validation_screen.dart';
 import 'package:doctor_app/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const HomePage(), // Home screen
-    const SearchPage(), // Search screen
+    const ShiftAssignmentScreen(), // Home screen
+    UserListScreen(), // Search screen
     const ProfileScreen(), // Profile screen
   ];
 
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 8), // Space between the image and the name
                     Text(
-                      'User Name', // Replace with actual user name
+                      'DoctorsApp', // Replace with actual user name
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -111,22 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Home Page (content)
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Home Page'));
-  }
-}
 
-// Search Page (content)
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Search Page'));
-  }
-}

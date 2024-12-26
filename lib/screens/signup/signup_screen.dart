@@ -20,10 +20,13 @@ class SignupScreen extends StatelessWidget {
         body: Stack(
           children: [
             // Background Image with Opacity
-            Positioned.fill(
+            Opacity(
+              opacity: 0.6, // Adjust opacity as needed
               child: Image.asset(
-                'assets/bg.jpeg', // Background image from assets
+                'assets/bg.jpeg', // Path to your background image
                 fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
               ),
             ),
 

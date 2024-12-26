@@ -70,7 +70,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             insets: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           ),
           tabs: [
-            _buildTab(Icons.home, "Home", 0, unselectedColor),
+            _buildTab(Icons.assignment, "Assignment Shift", 0, unselectedColor),
             _buildTab(Icons.verified, "Verified", 1, unselectedColor),
             _buildTab(Icons.person, "Profile", 2, unselectedColor),
           ],
