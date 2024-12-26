@@ -42,9 +42,18 @@ class _HomeScreenState extends State<HomeScreen> {
       direction: Direction.left,
       id: "leftDrawer",
       child: Container(
-        color: Colors.green,
         height: MediaQuery.of(context).size.height,
         width: 200,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.green, // Start color
+              Colors.grey, // End color
+            ],
+            begin: Alignment.topCenter, // Start from the top
+            end: Alignment.bottomCenter, // End at the bottom
+          ),
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -106,6 +115,39 @@ class _HomeScreenState extends State<HomeScreen> {
             SimpleDrawer.activate("leftDrawer");
           },
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              // Handle menu item selection
+              if (value == 'Profile') {
+                setState(() {
+                  _currentIndex = 3; // Navigate to ProfileScreen
+                });
+              } else if (value == 'LogOut') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Logging out...')),
+                );
+                await AuthService().signOut(context);
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: 'Profile',
+                child: ListTile(
+                  leading: Icon(Icons.person_4),
+                  title: Text('Profile'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'LogOut',
+                child: ListTile(
+                  leading: Icon(Icons.logout_rounded),
+                  title: Text('LogOut'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,

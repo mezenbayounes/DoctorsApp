@@ -24,7 +24,6 @@ class _HomeScreenStateHomeScreenDoctor extends State<HomeScreenDoctor> {
 
   final List<Widget> _pages = [
     ShiftListScreenDoctor(), // Search screen
-
     const ProfileScreen(), // Profile screen
   ];
 
@@ -43,9 +42,18 @@ class _HomeScreenStateHomeScreenDoctor extends State<HomeScreenDoctor> {
       direction: Direction.left,
       id: "leftDrawer",
       child: Container(
-        color: Colors.green,
         height: MediaQuery.of(context).size.height,
         width: 200,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.green, // Start color
+              Colors.white, // End color
+            ],
+            begin: Alignment.topCenter, // Start from the top
+            end: Alignment.bottomCenter, // End at the bottom
+          ),
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -98,7 +106,7 @@ class _HomeScreenStateHomeScreenDoctor extends State<HomeScreenDoctor> {
       ),
       appBar: AppBar(
         title: const Padding(
-          padding: EdgeInsets.only(left: 180),
+          padding: EdgeInsets.only(left: 154),
           child: Text("Doctors App"),
         ),
         leading: IconButton(
@@ -107,6 +115,39 @@ class _HomeScreenStateHomeScreenDoctor extends State<HomeScreenDoctor> {
             SimpleDrawer.activate("leftDrawer");
           },
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              // Handle menu item selection
+              if (value == 'Profile') {
+                setState(() {
+                  _currentIndex = 1; // Navigate to ProfileScreen
+                });
+              } else if (value == 'LogOut') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Logging out...')),
+                );
+                await AuthService().signOut(context);
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: 'Profile',
+                child: ListTile(
+                  leading: Icon(Icons.person_4),
+                  title: Text('Profile'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'LogOut',
+                child: ListTile(
+                  leading: Icon(Icons.logout_rounded),
+                  title: Text('LogOut'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavBarDoctor(
         currentIndex: _currentIndex,
