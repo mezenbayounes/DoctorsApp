@@ -1,7 +1,6 @@
 class ShiftModel {
   final String id;
-  final String userName;
-
+   String userName;
   final String day;
 
   ShiftModel({

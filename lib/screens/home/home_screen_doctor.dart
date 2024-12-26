@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_screen.dart';
+import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_screen_doctor.dart';
 import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_screen.dart';
 import 'package:doctor_app/screens/validation/validation_screen.dart';
 import 'package:doctor_app/services/auth_service.dart';
@@ -10,20 +11,20 @@ import 'package:doctor_app/screens/profile/profile_screen.dart';
 import 'package:doctor_app/widgets/bottom_nav_bar.dart';
 import 'package:simple_drawer/simple_drawer.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreenDoctor extends StatefulWidget {
+  const HomeScreenDoctor({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenStateHomeScreenDoctor createState() =>
+      _HomeScreenStateHomeScreenDoctor();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenStateHomeScreenDoctor extends State<HomeScreenDoctor> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const ShiftAssignmentScreen(), // Home screen
-    UserListScreen(), // Search screen
-    const ShiftListScreen(), // Profile screen
+    ShiftListScreenDoctor(), // Search screen
+
     const ProfileScreen(), // Profile screen
   ];
 
@@ -107,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
+      bottomNavigationBar: BottomNavBarDoctor(
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,
         context: context, // Pass context for navigation

@@ -1,3 +1,4 @@
+import 'package:doctor_app/screens/home/home_screen_doctor.dart';
 import 'package:doctor_app/screens/login/login_model.dart';
 import 'package:doctor_app/services/auth_service.dart';
 import 'package:doctor_app/widgets/CustomElevatedButton.dart';
@@ -145,6 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           await loginProvider.getUserIdByEmail(
                                               loginProvider.email);
                                       print("id of user $id");
+                                      final roleResponse = await loginProvider
+                                          .getUserRoleByEmail(
+                                              loginProvider.email);
+
+// Assuming the response is a Map with the 'role' key
+                                      final role = roleResponse['role'];
+
+                                      print("role of user $role");
                                       final prefs =
                                           await SharedPreferences.getInstance();
                                       await prefs.setString(
@@ -153,14 +162,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                           prefs.getString('user_id');
                                       print("stored user ID: $userId");
                                       // Navigate to the home screen and remove the login screen from the stack
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
+                                      if (role == "manager") {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
                                             builder: (context) =>
-                                                const HomeScreen()), // Use MaterialPageRoute
-                                        (Route<dynamic> route) =>
-                                            false, // This ensures all previous routes are removed
-                                      );
+                                                const HomeScreen(), // Navigate to HomeScreen for managers
+                                          ),
+                                          (Route<dynamic> route) =>
+                                              false, // This removes all previous routes
+                                        );
+                                      } else {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreenDoctor(), // Navigate to HomeScreenDoctor for doctors
+                                          ),
+                                          (Route<dynamic> route) =>
+                                              false, // This removes all previous routes
+                                        );
+                                      }
                                     } else {
                                       // If login failed, show a failure message
                                       ScaffoldMessenger.of(context)

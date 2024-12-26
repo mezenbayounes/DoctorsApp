@@ -72,4 +72,33 @@ class LoginProvider with ChangeNotifier {
       throw Exception('An error occurred: $e');
     }
   }
+
+  Future<Map<String, dynamic>> getUserRoleByEmail(String email) async {
+  final Uri url = Uri.parse('$baseUrl/getUserRoleByEmail');
+  final Map<String, dynamic> requestBody = {
+    'email': email,
+  };
+  print("Request body: ${json.encode(requestBody)}");
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      // Return the response body as a Map
+      return json.decode(response.body);  // Return as Map<String, dynamic>
+    } else {
+      // Handle error response
+      throw Exception(
+          'Failed to fetch user data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle any exception (e.g., network error)
+    throw Exception('An error occurred: $e');
+  }
+}
+
 }
