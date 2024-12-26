@@ -39,7 +39,7 @@ class _ShiftAssignmentScreenState extends State<ShiftAssignmentScreen> {
           // Centered container with shadow effect for form elements
 
           Padding(
-            padding: const EdgeInsets.only(top: 80, left: 70),
+            padding: const EdgeInsets.only(top: 80, left: 60),
             child: Text(
               'Assign Shift',
               style: TextStyle(
@@ -172,6 +172,21 @@ class _ShiftAssignmentScreenState extends State<ShiftAssignmentScreen> {
                                 shiftProvider.shiftAssignmentModel.date,
                             firstDate: DateTime.now(),
                             lastDate: DateTime(2100),
+                            builder: (BuildContext context, Widget? child) {
+                              // Customize the theme of the DatePicker
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  primaryColor: Colors
+                                      .green, // Set the primary color to green
+                                  colorScheme:
+                                      ColorScheme.light(primary: Colors.green),
+                                  buttonTheme: ButtonThemeData(
+                                      textTheme: ButtonTextTheme.primary),
+                                ),
+                                child:
+                                    child!, // Return the child widget of DatePicker
+                              );
+                            },
                           );
                           if (pickedDate != null) {
                             shiftProvider.setDate(pickedDate);
@@ -198,6 +213,7 @@ class _ShiftAssignmentScreenState extends State<ShiftAssignmentScreen> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 45),
 
                       // Stylish Text before Assign Button

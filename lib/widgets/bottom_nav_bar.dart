@@ -28,13 +28,14 @@ class _BottomNavBarState extends State<BottomNavBar>
     Colors.green,
     Colors.green,
     Colors.green,
+    Colors.green,
   ];
 
   @override
   void initState() {
     super.initState();
     currentPage = widget.currentIndex;
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     tabController.addListener(() {
       final value = tabController.index;
       if (value != currentPage && mounted) {
@@ -58,22 +59,26 @@ class _BottomNavBarState extends State<BottomNavBar>
         ? Colors.black
         : Colors.white;
 
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      child: SizedBox(
-        height: 60,
-        child: TabBar(
-          controller: tabController,
-          indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-          indicator: UnderlineTabIndicator(
-            borderSide: BorderSide(color: colors[currentPage], width: 1.5),
-            insets: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+    return SafeArea(
+      child: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: SizedBox(
+          height: 60,
+          child: TabBar(
+            controller: tabController,
+            indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(color: colors[currentPage], width: 1.5),
+              insets: const EdgeInsets.fromLTRB(20, 0, 16, 8),
+            ),
+            tabs: [
+              _buildTab(Icons.assignment, "Assign", 0, unselectedColor),
+              _buildTab(Icons.verified, "Verified", 1, unselectedColor),
+              _buildTab(
+                  Icons.calendar_today_outlined, "Shifts", 2, unselectedColor),
+              _buildTab(Icons.person, "Profile", 3, unselectedColor),
+            ],
           ),
-          tabs: [
-            _buildTab(Icons.assignment, "Assignment Shift", 0, unselectedColor),
-            _buildTab(Icons.verified, "Verified", 1, unselectedColor),
-            _buildTab(Icons.person, "Profile", 2, unselectedColor),
-          ],
         ),
       ),
     );

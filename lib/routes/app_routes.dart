@@ -1,3 +1,4 @@
+import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_screen.dart';
 import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_screen.dart';
 import 'package:doctor_app/screens/validation/validation_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String usersList = '/usersList';
   static const String shiftAssignmentScreen = '/shiftAssignmentScreen';
+    static const String shiftListScreen = '/shiftListScreen';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -32,6 +35,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => UserListScreen());
       case shiftAssignmentScreen:
         return MaterialPageRoute(builder: (_) => ShiftAssignmentScreen());
+        case shiftListScreen:
+        return MaterialPageRoute(builder: (_) => ShiftListScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

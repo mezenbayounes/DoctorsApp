@@ -23,9 +23,18 @@ class _UserListScreenState extends State<UserListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Users Not Verified List'),
+        title: Center(
+          child: Text(
+            'Users Not Verified List',
+            style: TextStyle(
+              fontSize: 35,
+              fontFamily: 'Roboto', // Use your custom font
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 1, 112, 19),
+            ),
+          ),
+        ),
       ),
-      
       body: Stack(
         children: [
           // Background image with opacity

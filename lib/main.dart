@@ -1,5 +1,6 @@
 import 'package:doctor_app/firebase_options.dart';
 import 'package:doctor_app/routes/app_routes.dart';
+import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_provider.dart';
 import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_provider.dart';
 import 'package:doctor_app/screens/home/home_provider.dart';
 import 'package:doctor_app/screens/login/login_provider.dart';
@@ -29,6 +30,7 @@ class DoctorsApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => ValidationProvider()),
         ChangeNotifierProvider(create: (_) => ShiftAssignmentProvider()),
+        ChangeNotifierProvider(create: (context) => ShiftProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

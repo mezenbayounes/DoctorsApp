@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_screen.dart';
 import 'package:doctor_app/screens/Shift_Assignment/Shift_Assignment_screen.dart';
 import 'package:doctor_app/screens/validation/validation_screen.dart';
 import 'package:doctor_app/services/auth_service.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     const ShiftAssignmentScreen(), // Home screen
     UserListScreen(), // Search screen
+    const ShiftListScreen(), // Profile screen
     const ProfileScreen(), // Profile screen
   ];
 
@@ -112,7 +114,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
-
