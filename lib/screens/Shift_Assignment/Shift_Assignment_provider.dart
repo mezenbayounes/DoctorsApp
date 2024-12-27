@@ -50,6 +50,8 @@ class ShiftAssignmentProvider with ChangeNotifier {
   );
 
   bool _isLoading = false;
+  bool hasError = false;
+
   bool get isLoading => _isLoading;
   ShiftAssignmentModel get shiftAssignmentModel => _shiftAssignmentModel;
 
@@ -68,13 +70,19 @@ class ShiftAssignmentProvider with ChangeNotifier {
   }
 
   void setIsLoading(bool value) {
-  _isLoading = value;
-  // Ensure the UI doesn't update during the build phase.
-  Future.delayed(Duration.zero, () {
-    notifyListeners();
-  });
-}
+    _isLoading = value;
+    // Ensure the UI doesn't update during the build phase.
+    Future.delayed(Duration.zero, () {
+      notifyListeners();
+    });
+  }
 
+  void setError(bool value) {
+    hasError = value;
+    // Ensure the UI doesn't update during the build phase.
+
+    notifyListeners();
+  }
 
   Future<bool> assignShift() async {
     setIsLoading(true);
@@ -120,12 +128,22 @@ class ShiftAssignmentProvider with ChangeNotifier {
 
     try {
       final Uri url = Uri.parse('$baseUrl/get_doctors'); // Corrected URL
-      final response = await http.get(url, headers: {'Content-Type': 'application/json'});
+      final response =
+          await http.get(url, headers: {'Content-Type': 'application/json'});
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        _doctors = ProfileModel.fromJsonList(data); // Update the list of doctors
+        setError(false);
+
+        _doctors = ProfileModel.fromJsonList(data);
+        print(response.body);
+        // Update the list of doctors
         notifyListeners(); // Notify UI to update with new data
+      } else if (response.statusCode == 404) {
+        print('No validate doctor found ');
+        _doctors = [];
+        setError(true);
+        // Optionally handle empty shift list when 404
       } else {
         throw Exception(
             'Failed to fetch users. Status code: ${response.statusCode}');

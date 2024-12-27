@@ -90,63 +90,80 @@ class _ShiftAssignmentScreenState extends State<ShiftAssignmentScreen> {
                       ),
                       Consumer<ShiftAssignmentProvider>(
                         builder: (context, shiftProvider, child) {
-                          return shiftProvider.isLoading
-                              ? const Center(child: CircularProgressIndicator())
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 5.0,
-                                        offset: const Offset(
-                                            0, 2), // Shadow position
+                          // Show loading indicator while fetching data
+                          if (shiftProvider.isLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          // Show error message if no doctors are found (404 error)
+                          if (shiftProvider.hasError) {
+                            return Center(
+                              child: Text(
+                                'No doctors found',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            );
+                          }
+
+                          // Show Dropdown if doctors are available
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 5.0,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: DropdownButton<String>(
+                              value: shiftProvider
+                                      .shiftAssignmentModel.userId.isEmpty
+                                  ? null
+                                  : shiftProvider.shiftAssignmentModel.userId,
+                              isExpanded: true,
+                              hint: const Text(
+                                'Select Doctor',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                              ),
+                              items: shiftProvider.doctors.map((doctor) {
+                                return DropdownMenuItem<String>(
+                                  value: doctor.id,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.person,
+                                        color: Colors.green,
                                       ),
+                                      const SizedBox(width: 8.0),
+                                      Text(doctor.name),
                                     ],
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12.0),
-                                  child: DropdownButton<String>(
-                                    value: shiftProvider
-                                            .shiftAssignmentModel.userId.isEmpty
-                                        ? null
-                                        : shiftProvider
-                                            .shiftAssignmentModel.userId,
-                                    isExpanded: true,
-                                    hint: const Text(
-                                      'Select Doctor',
-                                      style: TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0)),
-                                    ),
-                                    items: shiftProvider.doctors.map((doctor) {
-                                      return DropdownMenuItem<String>(
-                                        value: doctor.id,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.person,
-                                              color: Colors.green,
-                                            ),
-                                            const SizedBox(width: 8.0),
-                                            Text(doctor.name),
-                                          ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (selectedUserId) {
-                                      if (selectedUserId != null) {
-                                        shiftProvider.setUserId(selectedUserId);
-                                      }
-                                    },
-                                    dropdownColor: Colors.white,
-                                    elevation: 2,
-                                    icon: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
                                 );
+                              }).toList(),
+                              onChanged: (selectedUserId) {
+                                if (selectedUserId != null) {
+                                  shiftProvider.setUserId(selectedUserId);
+                                }
+                              },
+                              dropdownColor: Colors.white,
+                              elevation: 2,
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 20),

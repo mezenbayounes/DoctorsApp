@@ -48,6 +48,7 @@ dependencies:
   custom_calender_picker: ^0.1.1
   easy_date_timeline: ^2.0.6
   intl: ^0.19.0
+  firebase_messaging: ^15.1.6
 
 dev_dependencies:
   flutter_test:

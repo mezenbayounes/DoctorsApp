@@ -58,8 +58,17 @@ class _UserListScreenState extends State<UserListScreen> {
                   return Center(child: CircularProgressIndicator());
                 }
 
-                if (validationProvider.profiles.isEmpty) {
-                  return Center(child: Text('No users found.'));
+                if (validationProvider.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No Doctors found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  );
                 }
 
                 return ListView.builder(

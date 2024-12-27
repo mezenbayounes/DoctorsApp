@@ -36,8 +36,11 @@ class ProfileModel {
 class ValidationProvider with ChangeNotifier {
   List<ProfileModel> _profiles = [];
   bool _isLoading = false;
+  bool _isEmpty = false;
 
   bool get isLoading => _isLoading;
+  bool get isEmpty => _isEmpty;
+
   List<ProfileModel> get profiles => _profiles;
 
   void setIsLoading(bool value) {
@@ -45,8 +48,15 @@ class ValidationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsEmpty(bool value) {
+    _isEmpty = value;
+    notifyListeners();
+  }
+
   Future<void> fetchAllUsers() async {
     setIsLoading(true);
+    setIsEmpty(false); // Reset empty state before fetching data
+
     try {
       final Uri url =
           Uri.parse('$baseUrl/GetAllUsers'); // Changed URL to GetAllUsers
@@ -58,6 +68,11 @@ class ValidationProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         _profiles = ProfileModel.fromJsonList(data); // Parse the list of users
+      } else if (response.statusCode == 404) {
+        print('No doctor found ');
+        setIsEmpty(true);
+
+        // Optionally handle empty shift list when 404
       } else {
         throw Exception(
             'Failed to fetch users. Status code: ${response.statusCode}');

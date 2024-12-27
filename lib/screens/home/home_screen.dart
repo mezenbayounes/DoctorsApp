@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: AppBar(
         title: const Padding(
-          padding: EdgeInsets.only(left: 180),
+          padding: EdgeInsets.only(left: 154),
           child: Text("Doctors App"),
         ),
         leading: IconButton(

@@ -154,36 +154,24 @@ class SignupScreen extends StatelessWidget {
                                           context: context,
                                         );
 
+                                        // If sign-in is successful, call backend API and navigate
                                         if (signupUser != null) {
-                                          // After sign-up, immediately sign in the user
-                                          var user = await AuthService()
-                                              .signInWithEmailPassword(
-                                            email: signupProvider
-                                                .signupModel.email,
-                                            password: signupProvider
-                                                .signupModel.password,
-                                            context: context,
+                                          // Save user in your backend
+                                          await signupProvider.signup();
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Signup  successful! Please log in.'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              backgroundColor: Colors.green,
+                                            ),
                                           );
 
-                                          // If sign-in is successful, call backend API and navigate
-                                          if (user != null) {
-                                            // Save user in your backend
-                                            await signupProvider.signup();
-
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                    'Signup and login successful! Please log in.'),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                backgroundColor: Colors.green,
-                                              ),
-                                            );
-
-                                            Navigator.pushReplacementNamed(
-                                                context, AppRoutes.login);
-                                          }
+                                          Navigator.pushReplacementNamed(
+                                              context, AppRoutes.login);
                                         }
                                       } on FirebaseAuthException catch (e) {
                                         // Handle specific FirebaseAuthException errors

@@ -2,7 +2,6 @@ import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_module.dart';
 import 'package:doctor_app/screens/List_All_Shifts/GetAllShifts_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:doctor_app/constant/constant.dart'; // Import for baseUrl or necessary constants
 import 'package:intl/intl.dart';
 
 class ShiftListScreen extends StatefulWidget {
@@ -13,17 +12,26 @@ class ShiftListScreen extends StatefulWidget {
 }
 
 class _ShiftListScreenState extends State<ShiftListScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    // Fetch all shifts when the screen is loaded
     final shiftProvider = Provider.of<ShiftProvider>(context, listen: false);
     shiftProvider.fetchAllShifts();
+
+    // Add listener to detect scrolling
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // Automatically refresh when scrolled to the bottom
+        shiftProvider.fetchAllShifts();
+      }
+    });
   }
 
   Future<void> _refreshShifts() async {
     final shiftProvider = Provider.of<ShiftProvider>(context, listen: false);
-    // Call the fetch method again to refresh the shifts
     await shiftProvider.fetchAllShifts();
   }
 
@@ -37,7 +45,7 @@ class _ShiftListScreenState extends State<ShiftListScreen> {
           "Shift List",
           style: TextStyle(
             fontSize: 40,
-            fontFamily: 'Roboto', // Use your custom font
+            fontFamily: 'Roboto',
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 1, 112, 19),
           ),
@@ -47,9 +55,9 @@ class _ShiftListScreenState extends State<ShiftListScreen> {
         children: [
           // Background image with opacity
           Opacity(
-            opacity: 0.6, // Adjust opacity as needed
+            opacity: 0.6,
             child: Image.asset(
-              'assets/bg.jpeg', // Path to your background image
+              'assets/bg.jpeg',
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
@@ -59,45 +67,54 @@ class _ShiftListScreenState extends State<ShiftListScreen> {
             padding: const EdgeInsets.only(top: 20),
             child: shiftProvider.isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
-                    onRefresh: _refreshShifts, // Refresh function when pulled
-                    child: ListView.builder(
-                      itemCount: shiftProvider.shifts.length,
-                      itemBuilder: (context, index) {
-                        final shift = shiftProvider.shifts[index];
-                        return Dismissible(
-                          key: Key(shift.id), // Use the shift ID as the key
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) async {
-                            // Show confirmation dialog
-                            bool? confirmDelete =
-                                await _showDeleteConfirmationDialog(context);
-                            if (confirmDelete ?? false) {
-                              // Proceed with deletion if confirmed
-                              await shiftProvider.deleteShift(shift.id);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(
-                                        '${shift.userName}\'s shift deleted')),
-                              );
-                            } else {
-                              // Rebuild the widget if the user cancels deletion
-                              shiftProvider.fetchAllShifts();
-                            }
-                          },
-                          background: Container(
-                            color: Colors.red,
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
+                : shiftProvider.shifts.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No shifts available',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54,
                           ),
-                          child:
-                              ShiftCard(shift: shift), // Your ShiftCard widget
-                        );
-                      },
-                    ),
-                  ),
+                        ),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: _refreshShifts,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: shiftProvider.shifts.length,
+                          itemBuilder: (context, index) {
+                            final shift = shiftProvider.shifts[index];
+                            return Dismissible(
+                              key: Key(shift.id),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) async {
+                                bool? confirmDelete =
+                                    await _showDeleteConfirmationDialog(
+                                        context);
+                                if (confirmDelete ?? false) {
+                                  await shiftProvider.deleteShift(shift.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            '${shift.userName}\'s shift deleted')),
+                                  );
+                                } else {
+                                  shiftProvider.fetchAllShifts();
+                                }
+                              },
+                              background: Container(
+                                color: Colors.red,
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              child: ShiftCard(shift: shift),
+                            );
+                          },
+                        ),
+                      ),
           ),
         ],
       ),
@@ -114,13 +131,13 @@ class _ShiftListScreenState extends State<ShiftListScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Cancel
+                Navigator.of(context).pop(false);
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Confirm
+                Navigator.of(context).pop(true);
               },
               child: const Text('Delete'),
             ),
@@ -138,7 +155,7 @@ class ShiftCard extends StatelessWidget {
 
   String formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    return DateFormat('yyyy-MM-dd').format(dateTime); // Format the date
+    return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
   @override
@@ -167,7 +184,7 @@ class ShiftCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Shift Day: ${formatDate(shift.day)}', // Formatted date
+              'Shift Day: ${formatDate(shift.day)}',
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black38,
